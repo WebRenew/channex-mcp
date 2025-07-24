@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "channex": {
+      "command": "node",
+      "args": ["./dist/index.js"],
+      "env": {
+        "CHANNEX_API_KEY": "${CHANNEX_API_KEY}",
+        "CHANNEX_BASE_URL": "${CHANNEX_BASE_URL}"
+      }
+    }
+  }
+}
