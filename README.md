@@ -2,6 +2,10 @@
 
 A self-improving Model Context Protocol (MCP) server for interacting with the Channex.io API.
 
+## 🚀 Quick Start with Claude Code
+
+See [CLAUDE_CODE_SETUP.md](./CLAUDE_CODE_SETUP.md) for detailed instructions on adding this MCP to Claude Code.
+
 ## Features
 
 - ✨ Complete CRUD operations for Properties, Room Types, Rate Plans
