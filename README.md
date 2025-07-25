@@ -2,6 +2,10 @@
 
 A self-improving Model Context Protocol (MCP) server for interacting with the Channex.io API.
 
+## ⚠️ Important Disclaimer
+
+**This is NOT an official Channex.io project.** This is an independent, open-source implementation of an MCP server that interfaces with the Channex.io API. It is not affiliated with, endorsed by, or supported by Channex.io. Use at your own risk.
+
 ## 🚀 Quick Start with Claude Code
 
 See [CLAUDE_CODE_SETUP.md](./CLAUDE_CODE_SETUP.md) for detailed instructions on adding this MCP to Claude Code.
@@ -130,15 +134,20 @@ channex-mcp/
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests with `npm run command test-all`
-5. Submit a pull request
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+**Important**: This is an unofficial project. Contributors must:
+- Test against real Channex APIs (no mocks)
+- Respect Channex.io's Terms of Service
+- Never commit API keys or credentials
 
 ## License
 
-[Specify license]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Disclaimer
+
+This project is not affiliated with Channex.io. The Channex name and API are property of their respective owners. This is an independent project that provides an MCP interface to interact with the public Channex API.
 
 ## Support
 
