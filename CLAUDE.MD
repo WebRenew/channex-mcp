@@ -100,6 +100,19 @@ npm run dev
 - `channex_get_restrictions` - Get restrictions per rate plan
 - `channex_update_ari` - Update availability, rates, and restrictions
 
+### Channel Management
+
+- `channex_list_channels` - List all channel connections (with field filtering)
+- `channex_get_channel_by_code` - Get channels by code (optimized endpoint)
+- `channex_get_channel` - Get channel details by ID
+- `channex_create_channel` - Create new channel connection
+- `channex_update_channel` - Update channel (supports property_ids)
+- `channex_delete_channel` - Delete channel connection
+- `channex_get_channel_mappings` - Get channel mappings
+- `channex_update_channel_mapping` - Update channel mapping
+- `channex_get_airbnb_listings` - Get Airbnb-specific listings
+- `channex_update_airbnb_listing` - Update Airbnb listing settings
+
 ## Self-Improvement Workflow
 
 ### Adding New Endpoints
@@ -247,6 +260,30 @@ Error responses:
 4. **Booking Management** - Full booking lifecycle support
 5. **Reporting** - Analytics and insights tools
 
+## Recent Improvements
+
+### Response Size Optimization (Jan 2025)
+
+To handle large API responses that exceed token limits, we implemented several optimizations:
+
+1. **Field Filtering** - Added support for `fields` parameter to request only specific fields
+2. **Response Truncation** - Automatic truncation of large nested objects and arrays
+3. **Optimized Endpoints** - Added `channex_get_channel_by_code` for targeted channel queries
+4. **Parameter Fixes** - Updated pagination and filter parameters to match Channex API format
+
+### Channel Property Management
+
+- Added `property_ids` support to `channex_update_channel` to allow adding/removing properties from channels
+- This is essential for managing multi-property channel connections like Airbnb
+
+### Best Practices Learned
+
+1. **Token Limits** - Always consider response size when designing MCP tools
+2. **Field Selection** - Allow users to specify which fields they need
+3. **Pagination** - Implement proper pagination for list endpoints
+4. **Response Helpers** - Use utility functions to truncate and clean responses
+5. **Testing Against Live API** - Never use mock data; test against staging/production
+
 ## Contributing
 
 1. Use self-improvement commands to maintain consistency
@@ -256,4 +293,4 @@ Error responses:
 
 ## License
 
-[Specify license]
+MIT License
