@@ -1,4 +1,5 @@
 import { channexClient } from '../api/client.js';
+import { truncateLargeObject, extractEssentialChannelFields } from '../utils/response-helpers.js';
 
 export interface Channel {
   id: string;
@@ -37,6 +38,7 @@ export interface ListChannelsParams {
     channel_code?: string;
     is_active?: boolean;
   };
+  fields?: string[]; // Add field filtering support
 }
 
 export class ChannelsResource {
@@ -124,27 +126,49 @@ export class ChannelsResource {
     try {
       const queryParams: any = {};
       
+      // Pagination params - ensure proper handling
       if (params?.pagination?.page) {
-        queryParams['page[number]'] = params.pagination.page;
+        queryParams['page'] = params.pagination.page;
       }
       
       if (params?.pagination?.limit) {
-        queryParams['page[size]'] = params.pagination.limit;
+        queryParams['limit'] = params.pagination.limit;
       }
       
+      // Filter params
       if (params?.filter?.property_id) {
-        queryParams['filter[property_id]'] = params.filter.property_id;
+        queryParams['property_id'] = params.filter.property_id;
       }
       
       if (params?.filter?.channel_code) {
-        queryParams['filter[channel_code]'] = params.filter.channel_code;
+        queryParams['channel_code'] = params.filter.channel_code;
       }
       
       if (params?.filter?.is_active !== undefined) {
-        queryParams['filter[is_active]'] = params.filter.is_active;
+        queryParams['is_active'] = params.filter.is_active;
       }
       
-      const response = await channexClient.get<Channel[]>('/channels', queryParams);
+      // Field filtering to reduce response size
+      if (params?.fields && params.fields.length > 0) {
+        queryParams['fields'] = params.fields.join(',');
+      }
+      
+      const response = await channexClient.get<any>('/channels', queryParams);
+      
+      // If response has included data (relationships), minimize it
+      if (response.data && Array.isArray(response.data)) {
+        response.data = response.data.map((channel: any) => {
+          // Remove large included data if not explicitly requested
+          if (channel.relationships && !params?.fields?.includes('relationships')) {
+            delete channel.relationships;
+          }
+          if (channel.included) {
+            delete channel.included;
+          }
+          return channel;
+        });
+      }
+      
       return response;
     } catch (error) {
       throw error;
@@ -154,9 +178,69 @@ export class ChannelsResource {
   /**
    * Get a specific channel
    */
-  async get(id: string) {
+  async get(id: string, options?: { truncate?: boolean }) {
     try {
-      return await channexClient.get<Channel>(`/channels/${id}`);
+      const response = await channexClient.get<any>(`/channels/${id}`);
+      
+      // Apply truncation if requested or if response is very large
+      if (options?.truncate || JSON.stringify(response).length > 50000) {
+        if (response.data) {
+          response.data = extractEssentialChannelFields(response.data);
+        }
+        // Handle included data if present
+        if ((response as any).included) {
+          (response as any).included = truncateLargeObject((response as any).included, 2, 5);
+        }
+      }
+      
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * Get channels by channel code (more efficient than listing all)
+   */
+  async getByCode(channelCode: string, propertyId?: string) {
+    try {
+      const queryParams: any = {
+        channel_code: channelCode,
+        limit: 10,
+        fields: 'id,title,channel_code,is_active,properties,created_at,updated_at'
+      };
+      
+      if (propertyId) {
+        queryParams.property_id = propertyId;
+      }
+      
+      const response = await channexClient.get<any>('/channels', queryParams);
+      
+      // Truncate large nested objects
+      if (response.data && Array.isArray(response.data)) {
+        response.data = response.data.map((channel: any) => {
+          // Keep only essential data
+          const cleaned = {
+            id: channel.id,
+            type: channel.type,
+            attributes: {
+              channel_code: channel.attributes?.channel_code,
+              title: channel.attributes?.title,
+              is_active: channel.attributes?.is_active,
+              properties: channel.attributes?.properties || [],
+              created_at: channel.attributes?.created_at,
+              updated_at: channel.attributes?.updated_at,
+              // Truncate settings if too large
+              settings: channel.attributes?.settings ? 
+                { truncated: true, keys: Object.keys(channel.attributes.settings) } : 
+                undefined
+            }
+          };
+          return cleaned;
+        });
+      }
+      
+      return response;
     } catch (error) {
       throw error;
     }
@@ -191,6 +275,7 @@ export class ChannelsResource {
   async update(id: string, data: {
     title?: string;
     is_active?: boolean;
+    property_ids?: string[];
     settings?: Record<string, any>;
   }) {
     try {
@@ -216,9 +301,26 @@ export class ChannelsResource {
   /**
    * Get channel mappings
    */
-  async getMappings(channelId: string) {
+  async getMappings(channelId: string, options?: { limit?: number }) {
     try {
-      return await channexClient.get<ChannelMapping[]>(`/channels/${channelId}/mappings`);
+      const queryParams: any = {};
+      if (options?.limit) {
+        queryParams.limit = options.limit;
+      }
+      
+      const response = await channexClient.get<any>(`/channels/${channelId}/mappings`, queryParams);
+      
+      // Truncate large mapping responses
+      if (response.data && Array.isArray(response.data) && response.data.length > 20) {
+        const originalLength = response.data.length;
+        response.data = response.data.slice(0, 20);
+        // Add truncation info to meta or as a separate property
+        if (!response.meta) response.meta = {};
+        (response as any).meta.truncated = true;
+        (response as any).meta.truncated_count = originalLength - 20;
+      }
+      
+      return response;
     } catch (error) {
       throw error;
     }

@@ -93,10 +93,11 @@ The MCP server exposes the following tools:
 ### Channels (OTA Connections)
 - `channex_test_channel_api` - Test channel API access
 - `channex_check_existing_connection` - Check for existing channel connections
-- `channex_list_channels` - List all channel connections
+- `channex_list_channels` - List all channel connections (supports field filtering)
+- `channex_get_channel_by_code` - Get channels by code (optimized for specific channels)
 - `channex_get_channel` - Get channel details
 - `channex_create_channel` - Create new channel (e.g., Airbnb)
-- `channex_update_channel` - Update channel settings
+- `channex_update_channel` - Update channel settings (now supports property_ids)
 - `channex_delete_channel` - Delete channel connection
 - `channex_get_channel_mappings` - Get listing-to-rate-plan mappings
 - `channex_update_channel_mapping` - Map channel listings to rate plans
@@ -131,6 +132,19 @@ channex-mcp/
 2. Add TypeScript types in `src/types/index.ts`
 3. Implement handlers in the MCP server
 4. Update documentation using `update-docs`
+
+## Recent Updates (Jan 2025)
+
+### Response Size Optimization
+- Added field filtering support to reduce response sizes
+- Implemented response truncation for large objects
+- Created optimized `channex_get_channel_by_code` endpoint
+- Fixed pagination parameter formatting
+
+### Channel Management Enhancement
+- Added `property_ids` support to `channex_update_channel`
+- Enables adding/removing properties from existing channels
+- Essential for managing multi-property OTA connections
 
 ## Contributing
 

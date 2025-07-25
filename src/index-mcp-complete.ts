@@ -543,8 +543,31 @@ const channelTools = [
         channel_code: { type: 'string', description: 'Filter by channel code (e.g., airbnb)' },
         is_active: { type: 'boolean', description: 'Filter by active status' },
         page: { type: 'number', description: 'Page number' },
-        limit: { type: 'number', description: 'Items per page' }
+        limit: { type: 'number', description: 'Items per page' },
+        fields: { 
+          type: 'array', 
+          items: { type: 'string' },
+          description: 'Fields to include in response (reduces size)' 
+        }
       }
+    },
+  },
+  {
+    name: 'channex_get_channel_by_code',
+    description: 'Get channels by channel code (optimized for specific channel types like airbnb)',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        channel_code: { 
+          type: 'string', 
+          description: 'Channel code (e.g., airbnb, booking_com)' 
+        },
+        property_id: { 
+          type: 'string', 
+          description: 'Optional: filter by property ID' 
+        }
+      },
+      required: ['channel_code']
     },
   },
   {
@@ -602,6 +625,11 @@ const channelTools = [
           properties: {
             title: { type: 'string' },
             is_active: { type: 'boolean' },
+            property_ids: { 
+              type: 'array', 
+              items: { type: 'string' },
+              description: 'Array of property IDs to connect to the channel'
+            },
             settings: { type: 'object' }
           }
         }
@@ -865,7 +893,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           channel_code: args?.channel_code as string,
           is_active: args?.is_active as boolean
         },
+        fields: args?.fields as string[]
       });
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+
+    if (name === 'channex_get_channel_by_code') {
+      const result = await channelsResource.getByCode(
+        args?.channel_code as string,
+        args?.property_id as string
+      );
       return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
     }
 
