@@ -32,24 +32,23 @@ export function initializeApiKeys() {
       name: 'Development User',
       permissions: ['*']
     });
-    console.log(`🔑 Development API key: ${devKey}`);
+    console.log(`🔑 Development API key generated`);
     console.log(`Total API keys loaded: ${API_KEYS.size}`);
   }
 }
 
 export function authenticateRequest(req: AuthenticatedRequest, res: Response, next: NextFunction): Response | void {
-  const apiKey = req.headers['x-api-key'] as string || req.query.api_key as string;
+  const apiKey = req.headers['user-api-key'] as string;
 
   if (!apiKey) {
     return res.status(401).json({
       error: {
         code: 'MISSING_API_KEY',
-        message: 'API key is required. Please provide it in the X-API-Key header or api_key query parameter.'
+        message: 'API key is required. Please provide it in the user-api-key header.'
       }
     });
   }
 
-  console.log(`Checking API key: ${apiKey}, Total keys: ${API_KEYS.size}`);
   const keyInfo = API_KEYS.get(apiKey);
   if (!keyInfo) {
     return res.status(401).json({
@@ -64,8 +63,8 @@ export function authenticateRequest(req: AuthenticatedRequest, res: Response, ne
   req.apiKey = apiKey;
   req.userId = keyInfo.userId;
 
-  // Log API usage
-  console.log(`API call by ${keyInfo.name} (${keyInfo.userId}) to ${req.method} ${req.path}`);
+  // Log API usage (without sensitive info)
+  console.log(`API call to ${req.method} ${req.path}`);
 
   next();
 }

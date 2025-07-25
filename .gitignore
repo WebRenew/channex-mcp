@@ -12,6 +12,8 @@ dist/
 .env
 .env.local
 .env.*.local
+.mcp.json
+
 
 # Test files
 .claude/commands/test-results.json
