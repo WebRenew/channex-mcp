@@ -117,6 +117,8 @@ npm run dev
 
 ### Testing
 
+**IMPORTANT: NEVER USE MOCK DATA. All testing must be done against the live Channex API (staging or production).**
+
 Run all tests:
 ```bash
 npm run command test-all
@@ -126,6 +128,12 @@ Run specific resource tests:
 ```bash
 npm run command test-all -- --resource properties
 ```
+
+Testing Guidelines:
+- Always test against real Channex API endpoints
+- Use actual property IDs, room types, and rate plans from your Channex account
+- Test with real data to ensure accurate API behavior
+- Never create mock responses or fake data for testing
 
 ### Improving Types
 
@@ -142,6 +150,15 @@ npm run command improve-types -- --resource properties --sample-file samples/pro
 - Follow functional programming principles where appropriate
 - Keep functions small and focused
 - Use descriptive names
+
+### Testing Philosophy
+
+**NEVER USE MOCK DATA OR MOCK RESPONSES**
+- All development and testing must be done against live Channex APIs
+- Use real property data from staging or production environments
+- Test with actual API responses to ensure compatibility
+- When implementing new features, test them immediately against the live API
+- Document actual API responses and use them to improve type definitions
 
 ### Error Handling
 

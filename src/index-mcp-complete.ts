@@ -10,6 +10,7 @@ import { propertiesResource } from './resources/properties.js';
 import { roomTypesResource } from './resources/room-types.js';
 import { ratePlansResource } from './resources/rate-plans.js';
 import { ariResource } from './resources/ari.js';
+import { channelsResource } from './resources/channels.js';
 
 // Create MCP server
 const server = new Server(
@@ -503,8 +504,193 @@ const ariTools = [
   },
 ];
 
+// Channel Tools with JSON Schema
+const channelTools = [
+  {
+    name: 'channex_test_channel_api',
+    description: 'Test channel API access and discover available endpoints',
+    inputSchema: {
+      type: 'object',
+      properties: {}
+    },
+  },
+  {
+    name: 'channex_list_channels',
+    description: 'List all channel connections',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        property_id: { type: 'string', description: 'Filter by property ID' },
+        channel_code: { type: 'string', description: 'Filter by channel code (e.g., airbnb)' },
+        is_active: { type: 'boolean', description: 'Filter by active status' },
+        page: { type: 'number', description: 'Page number' },
+        limit: { type: 'number', description: 'Items per page' }
+      }
+    },
+  },
+  {
+    name: 'channex_get_channel',
+    description: 'Get details of a specific channel',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', description: 'Channel ID' }
+      },
+      required: ['id']
+    },
+  },
+  {
+    name: 'channex_create_channel',
+    description: 'Create a new channel connection (e.g., Airbnb)',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        channel_code: { type: 'string', description: 'Channel code (e.g., airbnb, booking_com)' },
+        title: { type: 'string', description: 'Channel connection title' },
+        property_ids: { 
+          type: 'array', 
+          items: { type: 'string' },
+          description: 'Array of property IDs to connect'
+        },
+        settings: {
+          type: 'object',
+          description: 'Channel-specific settings',
+          properties: {
+            min_stay_type: { 
+              type: 'string', 
+              enum: ['arrival', 'through'],
+              description: 'Min stay type for Airbnb'
+            },
+            send_booking_notification_email: { 
+              type: 'boolean',
+              description: 'Send email notifications for bookings'
+            }
+          }
+        }
+      },
+      required: ['channel_code', 'title', 'property_ids']
+    },
+  },
+  {
+    name: 'channex_update_channel',
+    description: 'Update channel settings',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', description: 'Channel ID' },
+        data: {
+          type: 'object',
+          properties: {
+            title: { type: 'string' },
+            is_active: { type: 'boolean' },
+            settings: { type: 'object' }
+          }
+        }
+      },
+      required: ['id', 'data']
+    },
+  },
+  {
+    name: 'channex_delete_channel',
+    description: 'Delete a channel connection',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', description: 'Channel ID' }
+      },
+      required: ['id']
+    },
+  },
+  {
+    name: 'channex_get_channel_mappings',
+    description: 'Get mappings between channel listings and rate plans',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        channel_id: { type: 'string', description: 'Channel ID' }
+      },
+      required: ['channel_id']
+    },
+  },
+  {
+    name: 'channex_update_channel_mapping',
+    description: 'Map a channel listing to a room type and rate plan',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        channel_id: { type: 'string', description: 'Channel ID' },
+        mapping_id: { type: 'string', description: 'Mapping ID' },
+        data: {
+          type: 'object',
+          properties: {
+            room_type_id: { type: 'string' },
+            rate_plan_id: { type: 'string' },
+            is_mapped: { type: 'boolean' },
+            settings: { type: 'object' }
+          }
+        }
+      },
+      required: ['channel_id', 'mapping_id', 'data']
+    },
+  },
+  {
+    name: 'channex_get_airbnb_listings',
+    description: 'Get Airbnb listings for a channel',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        channel_id: { type: 'string', description: 'Channel ID' }
+      },
+      required: ['channel_id']
+    },
+  },
+  {
+    name: 'channex_update_airbnb_listing',
+    description: 'Update Airbnb listing settings (pricing, availability)',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        channel_id: { type: 'string', description: 'Channel ID' },
+        listing_id: { type: 'string', description: 'Listing ID' },
+        settings: {
+          type: 'object',
+          properties: {
+            price_settings: {
+              type: 'object',
+              properties: {
+                currency: { type: 'string' },
+                default_daily_price: { type: 'number' },
+                default_weekend_price: { type: 'number' },
+                monthly_stay_discount: { type: 'number' },
+                weekly_stay_discount: { type: 'number' },
+                price_per_extra_guest: { type: 'number' },
+                guests_included: { type: 'number' },
+                security_deposit: { type: 'number' },
+                cleaning_fee: { type: 'number' }
+              }
+            },
+            availability_settings: {
+              type: 'object',
+              properties: {
+                number_of_days: { type: 'number' },
+                number_of_hours: { type: 'number' },
+                preparation_time: { type: 'number' },
+                max_nights: { type: 'number' },
+                min_nights: { type: 'number' },
+                checkin_dates: { type: 'array', items: { type: 'string' } },
+                checkout_dates: { type: 'array', items: { type: 'string' } }
+              }
+            }
+          }
+        }
+      },
+      required: ['channel_id', 'listing_id', 'settings']
+    },
+  },
+];
+
 // Register all tools
-const allTools = [...propertyTools, ...roomTypeTools, ...ratePlanTools, ...ariTools];
+const allTools = [...propertyTools, ...roomTypeTools, ...ratePlanTools, ...ariTools, ...channelTools];
 
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: allTools,
@@ -635,6 +821,77 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     if (name === 'channex_update_ari') {
       const result = await ariResource.updateARI(args as any);
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+
+    // Channel handlers
+    if (name === 'channex_test_channel_api') {
+      const result = await channelsResource.testAccess();
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+
+    if (name === 'channex_list_channels') {
+      const result = await channelsResource.list({
+        pagination: { page: args?.page as number, limit: args?.limit as number },
+        filter: {
+          property_id: args?.property_id as string,
+          channel_code: args?.channel_code as string,
+          is_active: args?.is_active as boolean
+        },
+      });
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+
+    if (name === 'channex_get_channel') {
+      const result = await channelsResource.get(args?.id as string);
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+
+    if (name === 'channex_create_channel') {
+      const result = await channelsResource.create({
+        channel_code: args?.channel_code as string,
+        title: args?.title as string,
+        property_ids: args?.property_ids as string[],
+        settings: args?.settings as any
+      });
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+
+    if (name === 'channex_update_channel') {
+      const result = await channelsResource.update(args?.id as string, args?.data as any);
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+
+    if (name === 'channex_delete_channel') {
+      const result = await channelsResource.delete(args?.id as string);
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+
+    if (name === 'channex_get_channel_mappings') {
+      const result = await channelsResource.getMappings(args?.channel_id as string);
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+
+    if (name === 'channex_update_channel_mapping') {
+      const result = await channelsResource.updateMapping(
+        args?.channel_id as string,
+        args?.mapping_id as string,
+        args?.data as any
+      );
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+
+    if (name === 'channex_get_airbnb_listings') {
+      const result = await channelsResource.getAirbnbListings(args?.channel_id as string);
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+
+    if (name === 'channex_update_airbnb_listing') {
+      const result = await channelsResource.updateAirbnbListing(
+        args?.channel_id as string,
+        args?.listing_id as string,
+        args?.settings as any
+      );
       return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
     }
 

@@ -86,6 +86,18 @@ The MCP server exposes the following tools:
 - `channex_get_restrictions` - Get restrictions per rate plan
 - `channex_update_ari` - Update availability, rates, and restrictions
 
+### Channels (OTA Connections)
+- `channex_test_channel_api` - Test channel API access
+- `channex_list_channels` - List all channel connections
+- `channex_get_channel` - Get channel details
+- `channex_create_channel` - Create new channel (e.g., Airbnb)
+- `channex_update_channel` - Update channel settings
+- `channex_delete_channel` - Delete channel connection
+- `channex_get_channel_mappings` - Get listing-to-rate-plan mappings
+- `channex_update_channel_mapping` - Map channel listings to rate plans
+- `channex_get_airbnb_listings` - Get Airbnb-specific listings
+- `channex_update_airbnb_listing` - Update Airbnb pricing/availability
+
 ## Development
 
 ### Project Structure
@@ -100,7 +112,8 @@ channex-mcp/
 │   │   ├── properties.ts
 │   │   ├── room-types.ts
 │   │   ├── rate-plans.ts
-│   │   └── ari.ts
+│   │   ├── ari.ts
+│   │   └── channels.ts
 │   └── types/           # TypeScript definitions
 ├── .claude/
 │   └── commands/        # Self-improvement scripts
