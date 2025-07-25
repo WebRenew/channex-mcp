@@ -515,6 +515,25 @@ const channelTools = [
     },
   },
   {
+    name: 'channex_check_existing_connection',
+    description: 'Check if a channel is already connected for specific properties',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        channel_code: { 
+          type: 'string', 
+          description: 'Channel code to check (e.g., airbnb, booking_com)' 
+        },
+        property_ids: { 
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Property IDs to check for existing connections' 
+        }
+      },
+      required: ['channel_code', 'property_ids']
+    },
+  },
+  {
     name: 'channex_list_channels',
     description: 'List all channel connections',
     inputSchema: {
@@ -827,6 +846,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     // Channel handlers
     if (name === 'channex_test_channel_api') {
       const result = await channelsResource.testAccess();
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+
+    if (name === 'channex_check_existing_connection') {
+      const result = await channelsResource.checkExistingConnection({
+        channel_code: args?.channel_code as string,
+        property_ids: args?.property_ids as string[]
+      });
       return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
     }
 

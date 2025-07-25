@@ -88,6 +88,7 @@ The MCP server exposes the following tools:
 
 ### Channels (OTA Connections)
 - `channex_test_channel_api` - Test channel API access
+- `channex_check_existing_connection` - Check for existing channel connections
 - `channex_list_channels` - List all channel connections
 - `channex_get_channel` - Get channel details
 - `channex_create_channel` - Create new channel (e.g., Airbnb)

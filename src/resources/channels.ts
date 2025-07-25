@@ -75,6 +75,49 @@ export class ChannelsResource {
   }
 
   /**
+   * Check if a channel is already connected for specific properties
+   */
+  async checkExistingConnection(params: {
+    channel_code: string;
+    property_ids: string[];
+  }) {
+    try {
+      // Get all channels for the given channel code
+      const response = await this.list({
+        filter: { channel_code: params.channel_code }
+      });
+
+      // Extract channels array from response
+      const channels = response.data || [];
+
+      // Check if any existing channel includes the requested properties
+      const existingConnections = [];
+      for (const channel of channels) {
+        const connectedProperties = channel.attributes.properties || [];
+        const overlap = params.property_ids.filter(id => 
+          connectedProperties.includes(id)
+        );
+        
+        if (overlap.length > 0) {
+          existingConnections.push({
+            channel_id: channel.id,
+            channel_title: channel.attributes.title,
+            overlapping_properties: overlap,
+            is_active: channel.attributes.is_active
+          });
+        }
+      }
+
+      return {
+        has_existing_connection: existingConnections.length > 0,
+        existing_connections: existingConnections
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
    * List all channels
    */
   async list(params?: ListChannelsParams) {
@@ -101,7 +144,8 @@ export class ChannelsResource {
         queryParams['filter[is_active]'] = params.filter.is_active;
       }
       
-      return await channexClient.get<Channel[]>('/channels', queryParams);
+      const response = await channexClient.get<Channel[]>('/channels', queryParams);
+      return response;
     } catch (error) {
       throw error;
     }

@@ -14,24 +14,45 @@
 channex_test_channel_api()
 ```
 
-### 2. Create Airbnb Channel Connection
+### 2. Check for Existing Connections
 ```typescript
-channex_create_channel({
+// First, check if Airbnb is already connected
+const check = await channex_check_existing_connection({
   channel_code: "airbnb",
-  title: "My Airbnb Connection",
-  property_ids: ["your-property-id"],
-  settings: {
-    min_stay_type: "arrival", // or "through"
-    send_booking_notification_email: true
-  }
-})
+  property_ids: ["your-property-id"]
+});
+
+if (check.has_existing_connection) {
+  console.log("Airbnb already connected:", check.existing_connections);
+  // Use existing channel ID for further operations
+  const channelId = check.existing_connections[0].channel_id;
+} else {
+  // Proceed to create new connection
+}
 ```
 
-### 3. Complete OAuth Connection
+### 3. Create Airbnb Channel Connection (if not exists)
+```typescript
+// Only create if no existing connection found
+if (!check.has_existing_connection) {
+  channex_create_channel({
+    channel_code: "airbnb",
+    title: "My Airbnb Connection",
+    property_ids: ["your-property-id"],
+    settings: {
+      min_stay_type: "arrival", // or "through"
+      send_booking_notification_email: true
+    }
+  })
+}
+```
+
+### 4. Complete OAuth Connection
 - After creating the channel, you'll need to complete the OAuth flow in the Channex UI
 - The channel will show as inactive until OAuth is completed
+- If you get an error about existing channel manager, see troubleshooting section
 
-### 4. List Available Airbnb Listings
+### 5. List Available Airbnb Listings
 ```typescript
 channex_get_airbnb_listings({
   channel_id: "channel-id-from-step-2"
@@ -126,9 +147,49 @@ Airbnb only supports one rate plan mapping per listing. To handle different occu
 ## Troubleshooting
 
 ### Connection Issues
-- Ensure no other channel manager is connected to Airbnb
-- Verify host information is complete in Airbnb
-- Check for email verification requirements
+
+#### Existing Channel Manager Connected
+If you see "Another channel manager is already connected":
+1. Log into Airbnb
+2. Go to Account > Settings > Privacy & Sharing
+3. Find "Connected apps" section
+4. Disconnect the existing channel manager
+5. Wait a few minutes for the disconnection to process
+6. Retry the Channex connection
+
+#### Channel Already Exists in Channex
+If a channel already exists for your properties:
+```typescript
+// List existing channels
+const channels = await channex_list_channels({
+  channel_code: "airbnb",
+  property_id: "your-property-id"
+});
+
+// If inactive, reactivate it
+if (channels[0]?.attributes.is_active === false) {
+  await channex_update_channel({
+    id: channels[0].id,
+    data: { is_active: true }
+  });
+}
+```
+
+#### Multiple Properties with Mixed Status
+Some properties connected, others not:
+```typescript
+const check = await channex_check_existing_connection({
+  channel_code: "airbnb", 
+  property_ids: allPropertyIds
+});
+
+// Only connect unconnected properties
+const unconnected = allPropertyIds.filter(id =>
+  !check.existing_connections.some(c => 
+    c.overlapping_properties.includes(id)
+  )
+);
+```
 
 ### Mapping Issues
 - Each listing can only map to one room type + rate plan
