@@ -51,7 +51,7 @@ export class PropertiesResource {
         });
       }
       
-      return await channexClient.get<Property[]>('/api/v1/properties', queryParams);
+      return await channexClient.get<Property[]>('/properties', queryParams);
     } catch (error) {
       throw error;
     }
@@ -59,7 +59,7 @@ export class PropertiesResource {
 
   async get(id: string) {
     try {
-      return await channexClient.get<Property>(`/api/v1/properties/${id}`);
+      return await channexClient.get<Property>(`/properties/${id}`);
     } catch (error) {
       throw error;
     }
@@ -67,7 +67,7 @@ export class PropertiesResource {
 
   async create(data: PropertyCreateData) {
     try {
-      return await channexClient.post<Property>('/api/v1/properties', { property: data });
+      return await channexClient.post<Property>('/properties', { property: data });
     } catch (error) {
       throw error;
     }
@@ -75,7 +75,7 @@ export class PropertiesResource {
 
   async update(id: string, data: Partial<PropertyCreateData>) {
     try {
-      return await channexClient.put<Property>(`/api/v1/properties/${id}`, { property: data });
+      return await channexClient.put<Property>(`/properties/${id}`, { property: data });
     } catch (error) {
       throw error;
     }
@@ -84,7 +84,7 @@ export class PropertiesResource {
   async delete(id: string, force: boolean = false) {
     try {
       const params = force ? { force: true } : undefined;
-      return await channexClient.delete(`/api/v1/properties/${id}`, params);
+      return await channexClient.delete(`/properties/${id}`, params);
     } catch (error) {
       throw error;
     }
@@ -92,7 +92,7 @@ export class PropertiesResource {
 
   async options() {
     try {
-      return await channexClient.get('/api/v1/properties/options');
+      return await channexClient.get('/properties/options');
     } catch (error) {
       throw error;
     }

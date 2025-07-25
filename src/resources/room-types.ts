@@ -42,7 +42,7 @@ export class RoomTypesResource {
         queryParams['filter[property_id]'] = params.filter.property_id;
       }
       
-      return await channexClient.get<RoomType[]>('/api/v1/room_types', queryParams);
+      return await channexClient.get<RoomType[]>('/room_types', queryParams);
     } catch (error) {
       throw error;
     }
@@ -50,7 +50,7 @@ export class RoomTypesResource {
 
   async get(id: string) {
     try {
-      return await channexClient.get<RoomType>(`/api/v1/room_types/${id}`);
+      return await channexClient.get<RoomType>(`/room_types/${id}`);
     } catch (error) {
       throw error;
     }
@@ -58,7 +58,7 @@ export class RoomTypesResource {
 
   async create(data: RoomTypeCreateData) {
     try {
-      return await channexClient.post<RoomType>('/api/v1/room_types', { room_type: data });
+      return await channexClient.post<RoomType>('/room_types', { room_type: data });
     } catch (error) {
       throw error;
     }
@@ -66,7 +66,7 @@ export class RoomTypesResource {
 
   async update(id: string, data: Partial<RoomTypeCreateData>) {
     try {
-      return await channexClient.put<RoomType>(`/api/v1/room_types/${id}`, { room_type: data });
+      return await channexClient.put<RoomType>(`/room_types/${id}`, { room_type: data });
     } catch (error) {
       throw error;
     }
@@ -75,7 +75,7 @@ export class RoomTypesResource {
   async delete(id: string, force: boolean = false) {
     try {
       const params = force ? { force: true } : undefined;
-      return await channexClient.delete(`/api/v1/room_types/${id}`, params);
+      return await channexClient.delete(`/room_types/${id}`, params);
     } catch (error) {
       throw error;
     }
@@ -83,7 +83,7 @@ export class RoomTypesResource {
 
   async options() {
     try {
-      return await channexClient.get('/api/v1/room_types/options');
+      return await channexClient.get('/room_types/options');
     } catch (error) {
       throw error;
     }

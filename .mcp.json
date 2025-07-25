@@ -1,0 +1,14 @@
+{
+  "name": "channex-mcp",
+  "description": "MCP server for Channex.io API integration",
+  "command": "node",
+  "args": ["dist/index.js"],
+  "env": {
+    "CHANNEX_API_KEY": "",
+    "CHANNEX_BASE_URL": "https://app.channex.io"
+  },
+  "requirements": {
+    "node": ">=18.0.0"
+  },
+  "build": "npm install && npm run build"
+}

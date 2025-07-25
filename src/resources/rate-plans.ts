@@ -41,7 +41,7 @@ export class RatePlansResource {
         });
       }
       
-      return await channexClient.get<RatePlan[]>('/api/v1/rate_plans', queryParams);
+      return await channexClient.get<RatePlan[]>('/rate_plans', queryParams);
     } catch (error) {
       throw error;
     }
@@ -49,7 +49,7 @@ export class RatePlansResource {
 
   async get(id: string) {
     try {
-      return await channexClient.get<RatePlan>(`/api/v1/rate_plans/${id}`);
+      return await channexClient.get<RatePlan>(`/rate_plans/${id}`);
     } catch (error) {
       throw error;
     }
@@ -57,7 +57,7 @@ export class RatePlansResource {
 
   async create(data: RatePlanCreateData) {
     try {
-      return await channexClient.post<RatePlan>('/api/v1/rate_plans', { rate_plan: data });
+      return await channexClient.post<RatePlan>('/rate_plans', { rate_plan: data });
     } catch (error) {
       throw error;
     }
@@ -65,7 +65,7 @@ export class RatePlansResource {
 
   async update(id: string, data: Partial<RatePlanCreateData>) {
     try {
-      return await channexClient.put<RatePlan>(`/api/v1/rate_plans/${id}`, { rate_plan: data });
+      return await channexClient.put<RatePlan>(`/rate_plans/${id}`, { rate_plan: data });
     } catch (error) {
       throw error;
     }
@@ -74,7 +74,7 @@ export class RatePlansResource {
   async delete(id: string, force: boolean = false) {
     try {
       const params = force ? { force: true } : undefined;
-      return await channexClient.delete(`/api/v1/rate_plans/${id}`, params);
+      return await channexClient.delete(`/rate_plans/${id}`, params);
     } catch (error) {
       throw error;
     }
@@ -83,7 +83,7 @@ export class RatePlansResource {
   async options(propertyId?: string) {
     try {
       const params = propertyId ? { filter: { property_id: propertyId } } : undefined;
-      return await channexClient.get('/api/v1/rate_plans/options', params);
+      return await channexClient.get('/rate_plans/options', params);
     } catch (error) {
       throw error;
     }

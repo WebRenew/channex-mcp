@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "channex": {
+      "command": "node",
+      "args": ["/Users/tradecraft/Desktop/Supahost Workspace/channex-mcp/dist/index.js"],
+      "env": {
+        "MCP_MODE": "mcp",
+        "CHANNEX_API_KEY": "your_channex_api_key_here",
+        "CHANNEX_BASE_URL": "https://app.channex.io/api/v1/"
+      }
+    }
+  }
+}

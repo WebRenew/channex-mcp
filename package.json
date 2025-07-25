@@ -4,10 +4,17 @@
   "description": "Self-improving MCP server for Channex.io API integration",
   "main": "dist/index.js",
   "type": "module",
+  "bin": {
+    "channex-mcp": "./bin/channex-mcp.js"
+  },
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "dev:mcp": "MCP_MODE=mcp tsx watch src/index.ts",
+    "dev:http": "MCP_MODE=http tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "start:mcp": "MCP_MODE=mcp node dist/index.js",
+    "start:http": "MCP_MODE=http node dist/index.js",
     "test": "jest",
     "command": "tsx .claude/commands/run.ts",
     "lint": "eslint src --ext .ts",
@@ -24,8 +31,16 @@
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.5.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/morgan": "^1.9.10",
     "axios": "^1.6.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.0.1",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.1",
     "zod": "^3.22.0"
   },
   "devDependencies": {
