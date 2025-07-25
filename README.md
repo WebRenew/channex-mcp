@@ -10,6 +10,35 @@ A self-improving Model Context Protocol (MCP) server for interacting with the Ch
 
 See [CLAUDE_CODE_SETUP.md](./CLAUDE_CODE_SETUP.md) for detailed instructions on adding this MCP to Claude Code.
 
+## 🔧 MCP Configuration
+
+### For Cursor/Claude Desktop
+
+Add the following to your `~/.cursor/mcp.json` or Claude Desktop configuration:
+
+```json
+{
+  "mcpServers": {
+    "channex": {
+      "command": "npx",
+      "args": ["--prefix", "/path/to/channex-mcp", "channex-mcp"],
+      "env": {
+        "MCP_MODE": "mcp",
+        "CHANNEX_API_KEY": "your-api-key-here",
+        "CHANNEX_BASE_URL": "https://app.channex.io/api/v1/"
+      }
+    }
+  }
+}
+```
+
+**Important**: Replace `/path/to/channex-mcp` with the absolute path to your channex-mcp directory and add your actual Channex API key.
+
+### Common Issues
+
+- **ES Module errors**: The project uses ES modules. The configuration above uses `npx` to handle module loading correctly.
+- **Server not starting**: Ensure you've run `npm install` and `npm run build` in the channex-mcp directory first.
+
 ## Features
 
 - ✨ Complete CRUD operations for Properties, Room Types, Rate Plans
