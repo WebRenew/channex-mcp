@@ -15,6 +15,10 @@ dist/
 .mcp.json
 
 
+# Claude-specific files
+.claude/
+CLAUDE.md
+
 # Test files
 .claude/commands/test-results.json
 coverage/
