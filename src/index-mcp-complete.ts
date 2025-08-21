@@ -11,6 +11,7 @@ import { roomTypesResource } from './resources/room-types.js';
 import { ratePlansResource } from './resources/rate-plans.js';
 import { ariResource } from './resources/ari.js';
 import { channelsResource } from './resources/channels.js';
+import { systemTools } from './resources/system.js';
 
 // Create MCP server
 const server = new Server(
@@ -737,7 +738,7 @@ const channelTools = [
 ];
 
 // Register all tools
-const allTools = [...propertyTools, ...roomTypeTools, ...ratePlanTools, ...ariTools, ...channelTools];
+const allTools = [...propertyTools, ...roomTypeTools, ...ratePlanTools, ...ariTools, ...channelTools, ...systemTools];
 
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: allTools,
@@ -957,6 +958,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         args?.settings as any
       );
       return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+
+    // System handlers
+    if (name === 'channex_list_tools') {
+      const systemTool = systemTools.find(t => t.name === name);
+      if (systemTool && systemTool.handler) {
+        const result = await systemTool.handler(args || {});
+        return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+      }
     }
 
     throw new Error(`Unknown tool: ${name}`);

@@ -1,0 +1,953 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-01-21",
+  "categories": {
+    "properties": {
+      "name": "Properties Management",
+      "description": "Tools for managing properties in Channex",
+      "tools": [
+        {
+          "name": "channex_list_properties",
+          "description": "List all properties with filtering and pagination support",
+          "examples": [
+            {
+              "description": "List all active properties",
+              "input": {
+                "filter": {
+                  "is_active": true
+                }
+              }
+            },
+            {
+              "description": "Get properties by page",
+              "input": {
+                "page": 1,
+                "limit": 10
+              }
+            }
+          ],
+          "parameters": {
+            "page": {
+              "type": "number",
+              "description": "Page number for pagination",
+              "required": false
+            },
+            "limit": {
+              "type": "number",
+              "description": "Number of items per page",
+              "required": false
+            },
+            "filter": {
+              "type": "object",
+              "description": "Filter properties by various criteria",
+              "required": false,
+              "properties": {
+                "id": "Property ID",
+                "title": "Property title",
+                "is_active": "Active status"
+              }
+            },
+            "fields": {
+              "type": "array",
+              "description": "Specify which fields to include in the response",
+              "required": false,
+              "example": ["id", "title", "currency"]
+            }
+          }
+        },
+        {
+          "name": "channex_get_property",
+          "description": "Get a specific property by ID",
+          "examples": [
+            {
+              "description": "Get property details",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The ID of the property",
+              "required": true
+            }
+          }
+        },
+        {
+          "name": "channex_create_property",
+          "description": "Create a new property",
+          "examples": [
+            {
+              "description": "Create a basic property",
+              "input": {
+                "title": "Beach Resort Hotel",
+                "currency": "USD",
+                "email": "contact@beachresort.com",
+                "phone": "+1234567890",
+                "zip": "12345",
+                "country": "US",
+                "state": "FL",
+                "city": "Miami",
+                "address": "123 Beach Street"
+              }
+            }
+          ],
+          "parameters": {
+            "title": {
+              "type": "string",
+              "description": "Property name",
+              "required": true
+            },
+            "currency": {
+              "type": "string",
+              "description": "3-letter currency code",
+              "required": true
+            },
+            "email": {
+              "type": "string",
+              "description": "Contact email",
+              "required": true
+            },
+            "phone": {
+              "type": "string",
+              "description": "Contact phone",
+              "required": true
+            },
+            "zip": {
+              "type": "string",
+              "description": "Postal code",
+              "required": true
+            },
+            "country": {
+              "type": "string",
+              "description": "2-letter country code",
+              "required": true
+            },
+            "state": {
+              "type": "string",
+              "description": "State/province",
+              "required": true
+            },
+            "city": {
+              "type": "string",
+              "description": "City name",
+              "required": true
+            },
+            "address": {
+              "type": "string",
+              "description": "Street address",
+              "required": true
+            }
+          }
+        },
+        {
+          "name": "channex_update_property",
+          "description": "Update an existing property",
+          "examples": [
+            {
+              "description": "Update property title",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000",
+                "title": "Updated Beach Resort"
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The ID of the property to update",
+              "required": true
+            },
+            "title": {
+              "type": "string",
+              "description": "Property name",
+              "required": false
+            },
+            "email": {
+              "type": "string",
+              "description": "Contact email",
+              "required": false
+            }
+          }
+        },
+        {
+          "name": "channex_delete_property",
+          "description": "Delete a property",
+          "examples": [
+            {
+              "description": "Delete a property",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The ID of the property to delete",
+              "required": true
+            }
+          }
+        }
+      ]
+    },
+    "room_types": {
+      "name": "Room Types Management",
+      "description": "Tools for managing room types within properties",
+      "tools": [
+        {
+          "name": "channex_list_room_types",
+          "description": "List room types for a property",
+          "examples": [
+            {
+              "description": "List all room types for a property",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            },
+            "page": {
+              "type": "number",
+              "description": "Page number",
+              "required": false
+            },
+            "limit": {
+              "type": "number",
+              "description": "Items per page",
+              "required": false
+            }
+          }
+        },
+        {
+          "name": "channex_get_room_type",
+          "description": "Get a specific room type",
+          "examples": [
+            {
+              "description": "Get room type details",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000",
+                "room_type_id": "456e7890-e89b-12d3-a456-426614174000"
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            },
+            "room_type_id": {
+              "type": "string",
+              "description": "The room type ID",
+              "required": true
+            }
+          }
+        },
+        {
+          "name": "channex_create_room_type",
+          "description": "Create a new room type",
+          "examples": [
+            {
+              "description": "Create a standard room",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000",
+                "title": "Standard Double Room",
+                "count_of_rooms": 10,
+                "occ_adults": 2,
+                "occ_children": 1,
+                "occ_infants": 1,
+                "default_occupancy": 2
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            },
+            "title": {
+              "type": "string",
+              "description": "Room type name",
+              "required": true
+            },
+            "count_of_rooms": {
+              "type": "number",
+              "description": "Total number of rooms",
+              "required": true
+            },
+            "occ_adults": {
+              "type": "number",
+              "description": "Maximum adults",
+              "required": true
+            },
+            "occ_children": {
+              "type": "number",
+              "description": "Maximum children",
+              "required": true
+            },
+            "occ_infants": {
+              "type": "number",
+              "description": "Maximum infants",
+              "required": true
+            },
+            "default_occupancy": {
+              "type": "number",
+              "description": "Default occupancy",
+              "required": true
+            }
+          }
+        },
+        {
+          "name": "channex_update_room_type",
+          "description": "Update an existing room type",
+          "examples": [
+            {
+              "description": "Update room count",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000",
+                "room_type_id": "456e7890-e89b-12d3-a456-426614174000",
+                "count_of_rooms": 15
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            },
+            "room_type_id": {
+              "type": "string",
+              "description": "The room type ID",
+              "required": true
+            },
+            "title": {
+              "type": "string",
+              "description": "Room type name",
+              "required": false
+            },
+            "count_of_rooms": {
+              "type": "number",
+              "description": "Total number of rooms",
+              "required": false
+            }
+          }
+        },
+        {
+          "name": "channex_delete_room_type",
+          "description": "Delete a room type",
+          "examples": [
+            {
+              "description": "Delete a room type",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000",
+                "room_type_id": "456e7890-e89b-12d3-a456-426614174000"
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            },
+            "room_type_id": {
+              "type": "string",
+              "description": "The room type ID",
+              "required": true
+            }
+          }
+        }
+      ]
+    },
+    "rate_plans": {
+      "name": "Rate Plans Management",
+      "description": "Tools for managing rate plans",
+      "tools": [
+        {
+          "name": "channex_list_rate_plans",
+          "description": "List rate plans for a property",
+          "examples": [
+            {
+              "description": "List all rate plans",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            },
+            "page": {
+              "type": "number",
+              "description": "Page number",
+              "required": false
+            },
+            "limit": {
+              "type": "number",
+              "description": "Items per page",
+              "required": false
+            }
+          }
+        },
+        {
+          "name": "channex_get_rate_plan",
+          "description": "Get a specific rate plan",
+          "examples": [
+            {
+              "description": "Get rate plan details",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000",
+                "rate_plan_id": "789e1234-e89b-12d3-a456-426614174000"
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            },
+            "rate_plan_id": {
+              "type": "string",
+              "description": "The rate plan ID",
+              "required": true
+            }
+          }
+        },
+        {
+          "name": "channex_create_rate_plan",
+          "description": "Create a new rate plan",
+          "examples": [
+            {
+              "description": "Create a standard rate plan",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000",
+                "title": "Standard Rate",
+                "currency": "USD",
+                "sell_mode": "per_room"
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            },
+            "title": {
+              "type": "string",
+              "description": "Rate plan name",
+              "required": true
+            },
+            "currency": {
+              "type": "string",
+              "description": "3-letter currency code",
+              "required": true
+            },
+            "sell_mode": {
+              "type": "string",
+              "description": "Selling mode",
+              "required": true,
+              "enum": ["per_room", "per_person"]
+            }
+          }
+        },
+        {
+          "name": "channex_update_rate_plan",
+          "description": "Update an existing rate plan",
+          "examples": [
+            {
+              "description": "Update rate plan title",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000",
+                "rate_plan_id": "789e1234-e89b-12d3-a456-426614174000",
+                "title": "Premium Rate"
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            },
+            "rate_plan_id": {
+              "type": "string",
+              "description": "The rate plan ID",
+              "required": true
+            },
+            "title": {
+              "type": "string",
+              "description": "Rate plan name",
+              "required": false
+            }
+          }
+        },
+        {
+          "name": "channex_delete_rate_plan",
+          "description": "Delete a rate plan",
+          "examples": [
+            {
+              "description": "Delete a rate plan",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000",
+                "rate_plan_id": "789e1234-e89b-12d3-a456-426614174000"
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            },
+            "rate_plan_id": {
+              "type": "string",
+              "description": "The rate plan ID",
+              "required": true
+            }
+          }
+        }
+      ]
+    },
+    "ari": {
+      "name": "ARI Management",
+      "description": "Tools for managing Availability, Rates, and Inventory",
+      "tools": [
+        {
+          "name": "channex_get_availability",
+          "description": "Get availability information for room types",
+          "examples": [
+            {
+              "description": "Get availability for date range",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000",
+                "room_type_id": "456e7890-e89b-12d3-a456-426614174000",
+                "start_date": "2025-02-01",
+                "end_date": "2025-02-07"
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            },
+            "room_type_id": {
+              "type": "string",
+              "description": "The room type ID",
+              "required": true
+            },
+            "start_date": {
+              "type": "string",
+              "description": "Start date (YYYY-MM-DD)",
+              "required": true
+            },
+            "end_date": {
+              "type": "string",
+              "description": "End date (YYYY-MM-DD)",
+              "required": true
+            }
+          }
+        },
+        {
+          "name": "channex_get_restrictions",
+          "description": "Get rate restrictions for rate plans",
+          "examples": [
+            {
+              "description": "Get restrictions for date range",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000",
+                "rate_plan_id": "789e1234-e89b-12d3-a456-426614174000",
+                "start_date": "2025-02-01",
+                "end_date": "2025-02-07"
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            },
+            "rate_plan_id": {
+              "type": "string",
+              "description": "The rate plan ID",
+              "required": true
+            },
+            "start_date": {
+              "type": "string",
+              "description": "Start date (YYYY-MM-DD)",
+              "required": true
+            },
+            "end_date": {
+              "type": "string",
+              "description": "End date (YYYY-MM-DD)",
+              "required": true
+            }
+          }
+        },
+        {
+          "name": "channex_update_ari",
+          "description": "Update availability, rates, and restrictions",
+          "examples": [
+            {
+              "description": "Update rates and availability",
+              "input": {
+                "property_id": "123e4567-e89b-12d3-a456-426614174000",
+                "values": [
+                  {
+                    "room_type_id": "456e7890-e89b-12d3-a456-426614174000",
+                    "rate_plan_id": "789e1234-e89b-12d3-a456-426614174000",
+                    "date": "2025-02-15",
+                    "rate": 150,
+                    "availability": 5,
+                    "min_stay": 2
+                  }
+                ]
+              }
+            }
+          ],
+          "parameters": {
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            },
+            "values": {
+              "type": "array",
+              "description": "Array of ARI updates",
+              "required": true,
+              "items": {
+                "room_type_id": "Room type ID",
+                "rate_plan_id": "Rate plan ID",
+                "date": "Date (YYYY-MM-DD)",
+                "rate": "Daily rate",
+                "availability": "Available rooms",
+                "min_stay": "Minimum stay",
+                "stop_sell": "Stop selling",
+                "closed_to_arrival": "Closed to arrival",
+                "closed_to_departure": "Closed to departure"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "channels": {
+      "name": "Channel Management",
+      "description": "Tools for managing channel connections and mappings",
+      "tools": [
+        {
+          "name": "channex_list_channels",
+          "description": "List all channel connections",
+          "examples": [
+            {
+              "description": "List channels with specific fields",
+              "input": {
+                "fields": ["id", "ota_name", "state"]
+              }
+            }
+          ],
+          "parameters": {
+            "page": {
+              "type": "number",
+              "description": "Page number",
+              "required": false
+            },
+            "limit": {
+              "type": "number",
+              "description": "Items per page",
+              "required": false
+            },
+            "fields": {
+              "type": "array",
+              "description": "Fields to include in response",
+              "required": false
+            }
+          }
+        },
+        {
+          "name": "channex_get_channel_by_code",
+          "description": "Get channels by OTA code (optimized for token limits)",
+          "examples": [
+            {
+              "description": "Get Airbnb channels",
+              "input": {
+                "ota_code": "airbnb",
+                "fields": ["id", "ota_name", "property_ids"]
+              }
+            }
+          ],
+          "parameters": {
+            "ota_code": {
+              "type": "string",
+              "description": "OTA identifier code",
+              "required": true,
+              "enum": ["airbnb", "bookingcom", "expedia"]
+            },
+            "fields": {
+              "type": "array",
+              "description": "Fields to include",
+              "required": false
+            }
+          }
+        },
+        {
+          "name": "channex_get_channel",
+          "description": "Get channel details by ID",
+          "examples": [
+            {
+              "description": "Get channel configuration",
+              "input": {
+                "channel_id": "abc123-channel-id"
+              }
+            }
+          ],
+          "parameters": {
+            "channel_id": {
+              "type": "string",
+              "description": "The channel ID",
+              "required": true
+            }
+          }
+        },
+        {
+          "name": "channex_create_channel",
+          "description": "Create a new channel connection",
+          "examples": [
+            {
+              "description": "Create Airbnb channel",
+              "input": {
+                "ota_name": "airbnb",
+                "property_ids": ["123e4567-e89b-12d3-a456-426614174000"],
+                "currency": "USD"
+              }
+            }
+          ],
+          "parameters": {
+            "ota_name": {
+              "type": "string",
+              "description": "OTA name",
+              "required": true
+            },
+            "property_ids": {
+              "type": "array",
+              "description": "Property IDs to connect",
+              "required": true
+            },
+            "currency": {
+              "type": "string",
+              "description": "Channel currency",
+              "required": false
+            }
+          }
+        },
+        {
+          "name": "channex_update_channel",
+          "description": "Update channel settings including property assignments",
+          "examples": [
+            {
+              "description": "Add properties to channel",
+              "input": {
+                "channel_id": "abc123-channel-id",
+                "property_ids": ["prop1-id", "prop2-id"]
+              }
+            }
+          ],
+          "parameters": {
+            "channel_id": {
+              "type": "string",
+              "description": "The channel ID",
+              "required": true
+            },
+            "property_ids": {
+              "type": "array",
+              "description": "Updated property list",
+              "required": false
+            },
+            "settings": {
+              "type": "object",
+              "description": "Channel-specific settings",
+              "required": false
+            }
+          }
+        },
+        {
+          "name": "channex_delete_channel",
+          "description": "Delete a channel connection",
+          "examples": [
+            {
+              "description": "Remove channel",
+              "input": {
+                "channel_id": "abc123-channel-id"
+              }
+            }
+          ],
+          "parameters": {
+            "channel_id": {
+              "type": "string",
+              "description": "The channel ID",
+              "required": true
+            }
+          }
+        },
+        {
+          "name": "channex_get_channel_mappings",
+          "description": "Get channel room/rate mappings",
+          "examples": [
+            {
+              "description": "Get mappings for property",
+              "input": {
+                "channel_id": "abc123-channel-id",
+                "property_id": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            }
+          ],
+          "parameters": {
+            "channel_id": {
+              "type": "string",
+              "description": "The channel ID",
+              "required": true
+            },
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            }
+          }
+        },
+        {
+          "name": "channex_update_channel_mapping",
+          "description": "Update room/rate mappings",
+          "examples": [
+            {
+              "description": "Map room type to channel",
+              "input": {
+                "channel_id": "abc123-channel-id",
+                "property_id": "123e4567-e89b-12d3-a456-426614174000",
+                "room_type_id": "456e7890-e89b-12d3-a456-426614174000",
+                "channel_room_id": "channel-room-123"
+              }
+            }
+          ],
+          "parameters": {
+            "channel_id": {
+              "type": "string",
+              "description": "The channel ID",
+              "required": true
+            },
+            "property_id": {
+              "type": "string",
+              "description": "The property ID",
+              "required": true
+            },
+            "room_type_id": {
+              "type": "string",
+              "description": "Room type ID",
+              "required": true
+            },
+            "channel_room_id": {
+              "type": "string",
+              "description": "Channel's room ID",
+              "required": true
+            }
+          }
+        },
+        {
+          "name": "channex_get_airbnb_listings",
+          "description": "Get Airbnb-specific listing details",
+          "examples": [
+            {
+              "description": "Get Airbnb listings",
+              "input": {
+                "channel_id": "abc123-channel-id"
+              }
+            }
+          ],
+          "parameters": {
+            "channel_id": {
+              "type": "string",
+              "description": "The Airbnb channel ID",
+              "required": true
+            }
+          }
+        },
+        {
+          "name": "channex_update_airbnb_listing",
+          "description": "Update Airbnb listing settings",
+          "examples": [
+            {
+              "description": "Update listing status",
+              "input": {
+                "channel_id": "abc123-channel-id",
+                "listing_id": "airbnb-listing-123",
+                "is_active": true
+              }
+            }
+          ],
+          "parameters": {
+            "channel_id": {
+              "type": "string",
+              "description": "The Airbnb channel ID",
+              "required": true
+            },
+            "listing_id": {
+              "type": "string",
+              "description": "The Airbnb listing ID",
+              "required": true
+            },
+            "is_active": {
+              "type": "boolean",
+              "description": "Listing active status",
+              "required": false
+            }
+          }
+        }
+      ]
+    },
+    "system": {
+      "name": "System Tools",
+      "description": "Tools for system information and tool discovery",
+      "tools": [
+        {
+          "name": "channex_list_tools",
+          "description": "Get a catalog of all available Channex MCP tools",
+          "examples": [
+            {
+              "description": "List all tools",
+              "input": {}
+            },
+            {
+              "description": "List tools by category",
+              "input": {
+                "category": "properties"
+              }
+            }
+          ],
+          "parameters": {
+            "category": {
+              "type": "string",
+              "description": "Filter by category",
+              "required": false,
+              "enum": ["properties", "room_types", "rate_plans", "ari", "channels", "system"]
+            }
+          }
+        }
+      ]
+    }
+  }
+}
