@@ -5,7 +5,7 @@
   "args": ["dist/index.js"],
   "env": {
     "CHANNEX_API_KEY": "",
-    "CHANNEX_BASE_URL": "https://app.channex.io"
+    "CHANNEX_BASE_URL": "https://app.channex.io/api/v1"
   },
   "requirements": {
     "node": ">=18.0.0"
