@@ -42,7 +42,7 @@ export class ARIResource {
     try {
       const queryParams: any = {
         'filter[property_id]': params.property_id,
-        'filter[restrictions]': params.restrictions.join(','),
+        'filter[restrictions]': params.restrictions,
       };
 
       if (params.date) {
@@ -55,7 +55,7 @@ export class ARIResource {
         queryParams['filter[date][lte]'] = params.date_lte;
       }
 
-      return await channexClient.get('/restrictions', queryParams);
+      return await channexClient.get('/api/v1/restrictions', queryParams);
     } catch (error) {
       throw error;
     }
@@ -77,7 +77,7 @@ export class ARIResource {
         queryParams['filter[date][lte]'] = params.date_lte;
       }
 
-      return await channexClient.get('/availability', queryParams);
+      return await channexClient.get('/api/v1/availability', queryParams);
     } catch (error) {
       throw error;
     }
@@ -85,7 +85,7 @@ export class ARIResource {
 
   async updateARI(data: UpdateARIData) {
     try {
-      return await channexClient.post('/ari', data);
+      return await channexClient.post('/api/v1/restrictions', data);
     } catch (error) {
       throw error;
     }
